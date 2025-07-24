@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Добавить тренировку</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <h1>Добавить тренировку</h1>
+  <form id="addForm">
+    <label>Дата: <input type="date" name="date" required></label><br />
+    <label>Время: <input type="time" name="time" required></label><br />
+    <label>Дистанция (км): <input type="number" name="distance" step="0.01" required></label><br />
+    <label>Темп (мин/км): <input type="text" name="pace" required></label><br />
+    <label>Скорость (км/ч): <input type="number" name="speed" step="0.1" required></label><br />
+    <label>Пульс: <input type="number" name="heartRate" required></label><br />
+    <button type="submit">Сохранить</button>
+  </form>
+  <button onclick="location.href='start.html'">Назад</button>
+
+  <script src="js/add.js"></script>
+</body>
+</html>
