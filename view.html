@@ -2,15 +2,63 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <title>Просмотр тренировок</title>
+  <title>Просмотр прогресса</title>
   <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .selector-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .selector-buttons button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 6px;
+      background-color: #00738b;
+      color: white;
+      border: none;
+      transition: 0.3s;
+    }
+    .selector-buttons button:hover {
+      background-color: #005a6a;
+    }
+    canvas {
+      max-width: 100%;
+      margin: 30px auto;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid #aaa;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #eee;
+    }
+  </style>
 </head>
 <body>
-  <h1>Тренировки</h1>
-  <div id="runsList"></div>
+  <h1>Выберите формат просмотра</h1>
+
+  <div class="selector-buttons">
+    <button id="viewDataBtn">Данные о тренировках</button>
+    <button id="viewChartBtn">Графики</button>
+    <button id="viewTableBtn">Таблица</button>
+  </div>
+
+  <div id="output"></div>
+  <canvas id="chart" class="hidden"></canvas>
 
   <button onclick="location.href='start.html'">Назад</button>
 
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Твой скрипт -->
   <script src="js/view.js"></script>
 </body>
 </html>
