@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Графики беговых тренировок</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 30px;
+    }
+    .chart-container {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      max-width: 700px;
+      margin: 20px auto;
+      padding: 15px;
+    }
+    canvas {
+      max-width: 100%;
+      height: 300px;
+    }
+    .back-button {
+      margin-top: 20px;
+      display: inline-block;
+      padding: 10px 20px;
+      background: #ddd;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #333;
+      transition: background 0.2s;
+    }
+    .back-button:hover {
+      background: #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Анализ беговых тренировок</h2>
+
+  <div class="chart-container">
+    <canvas id="distanceChart"></canvas>
+  </div>
+
+  <div class="chart-container">
+    <canvas id="paceChart"></canvas>
+  </div>
+
+  <div class="chart-container">
+    <canvas id="speedChart"></canvas>
+  </div>
+
+  <div class="chart-container">
+    <canvas id="heartRateChart"></canvas>
+  </div>
+
+  <a class="back-button" href="start.html">← Назад</a>
+
+  <script>
+    // Получаем данные из localStorage
+    // Ожидается, что каждый объект содержит date, distance, pace, speed, heartRate
+    const runs = JSON.parse(localStorage.getItem("runs")) || [];
+
+    if (runs.length === 0) {
+      document.body.insertAdjacentHTML('afterbegin', '<p>Нет данных для отображения. Добавьте тренировки.</p>');
+    }
+
+    // Метки (даты)
+    const labels = runs.map(run => run.date || '');
+
+    // Подготовка данных по показателям
+    const distanceData = runs.map(run => Number(run.distance) || 0);
+    const paceData = runs.map(run => Number(run.pace) || 0);
+    const speedData = runs.map(run => Number(run.speed) || 0);
+    const heartRateData = runs.map(run => Number(run.heartRate) || 0);
+
+    // Общие настройки для графиков
+    const commonOptions = {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: true,
+          labels: {
+            font: { size: 14 },
+            color: '#333'
+          }
+        },
+        tooltip: {
+          enabled: true,
+          mode: 'index',
+          intersect: false,
+          callbacks: {
+            label: context => {
+              const val = context.parsed.y;
+              switch(context.dataset.label) {
+                case 'Дистанция (км)': return `${val} км`;
+                case 'Темп (мин/км)': return `${val.toFixed(2)} мин/км`;
+                case 'Скорость (км/ч)': return `${val.toFixed(2)} км/ч`;
+                case 'Пульс (уд/мин)': return `${val} уд/мин`;
+                default: return val;
+              }
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Дата'
+          },
+          ticks: {
+            color: '#555'
+          }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: { color: '#555' },
+          title: {
+            display: true,
+            color: '#555',
+            font: { weight: 'bold' }
+          }
+        }
+      }
+    };
+
+    // Создаём графики
+    const createChart = (ctx, label, data, borderColor, backgroundColor, yTitle, yMin=null, yMax=null) => {
+      const options = JSON.parse(JSON.stringify(commonOptions));
+      options.scales.y.title.text = yTitle;
+      if (yMin !== null || yMax !== null) {
+        options.scales.y.min = yMin;
+        options.scales.y.max = yMax;
+      }
+
+      return new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: label,
+            data: data,
+            borderColor: borderColor,
+            backgroundColor: backgroundColor,
+            fill: true,
+            tension: 0.3,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            borderWidth: 2,
+          }]
+        },
+        options: options
+      });
+    };
+
+    // Инициализация графиков
+    createChart(
+      document.getElementById('distanceChart').getContext('2d'),
+      'Дистанция (км)', distanceData,
+      'rgba(75, 192, 192, 1)',
+      'rgba(75, 192, 192, 0.2)',
+      'Километры',
+      0
+    );
+
+    createChart(
+      document.getElementById('paceChart').getContext('2d'),
+      'Темп (мин/км)', paceData,
+      'rgba(5, 150, 105, 1)',
+      'rgba(5, 150, 105, 0.2)',
+      'Минуты на км',
+      Math.min(...paceData) - 1,
+      Math.max(...paceData) + 1
+    );
+
+    createChart(
+      document.getElementById('speedChart').getContext('2d'),
+      'Скорость (км/ч)', speedData,
+      'rgba(124, 58, 174, 1)',
+      'rgba(124, 58, 174, 0.2)',
+      'Километры в час',
+      0
+    );
+
+    createChart(
+      document.getElementById('heartRateChart').getContext('2d'),
+      'Пульс (уд/мин)', heartRateData,
+      'rgba(220, 38, 38, 1)',
+      'rgba(220, 38, 38, 0.2)',
+      'Удары в минуту',
+      0
+    );
+
+  </script>
+</body>
+</html>

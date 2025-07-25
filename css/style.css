@@ -54,3 +54,31 @@ body {
   object-fit: cover;
   display: block;
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse; /* Убирает двойные границы */
+  margin-top: 20px;
+}
+
+table, th, td {
+  border: 1px solid #ddd; /* Легкие границы для таблицы и ячеек */
+}
+
+th, td {
+  padding: 12px;
+  text-align: center; /* Выровняем данные по центру */
+}
+
+th {
+  background-color: #6a7fd0;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tr:hover {
+  background-color: #f1f1f1;
+}

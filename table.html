@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Таблица прогресса тренировок</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <div class="container">
+    <h2>Прогресс Беговых Тренировок</h2>
+    <table id="training-table">
+      <thead>
+        <tr>
+          <th>Дата</th>
+          <th>Дистанция (км)</th>
+          <th>Темп (мин/км)</th>
+          <th>Скорость (км/ч)</th>
+          <th>Пульс (уд/мин)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Данные будут вставлены через JavaScript -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // Функция для форматирования даты в формате DD.MM.YY
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      const day = ("0" + date.getDate()).slice(-2);
+      const month = ("0" + (date.getMonth() + 1)).slice(-2);
+      const year = date.getFullYear().toString().slice(-2); // Только последние 2 цифры года
+      return `${day}.${month}.${year}`;
+    }
+
+    // Загружаем данные из localStorage
+    const runs = JSON.parse(localStorage.getItem("runs")) || [];
+    const tableBody = document.querySelector("#training-table tbody");
+
+    // Если данных нет, показываем сообщение
+    if (runs.length === 0) {
+      tableBody.innerHTML = "<tr><td colspan='5'>Нет данных для отображения.</td></tr>";
+    } else {
+      // Добавляем данные в таблицу
+      runs.forEach(run => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${formatDate(run.date)}</td>
+          <td>${run.distance} км</td>
+          <td>${run.pace} мин/км</td>
+          <td>${run.speed} км/ч</td>
+          <td>${run.heartRate} уд/мин</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+  </script>
+
+</body>
+</html>
