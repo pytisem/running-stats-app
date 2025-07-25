@@ -13,24 +13,72 @@
     Прогресс беговых тренировок
   </div>
 
-  <!-- Кнопки -->
+<!-- ... предыдущий код до кнопок ... -->
+
+<!-- Кнопки -->
+<div id="view-progress-container">
   <div id="view-progress" class="gradient-block button-block" tabindex="0" role="button" aria-label="Посмотреть прогресс">
     Посмотреть прогресс
   </div>
 
-  <div id="add-training" class="gradient-block button-block" tabindex="0" role="button" aria-label="Добавить тренировку">
-    Добавить тренировку
+  <!-- Выпадающее меню -->
+  <div id="progress-menu" class="dropdown-menu" style="display: none;">
+    <div class="menu-item" onclick="location.href='view.html'">Формат данных</div>
+    <div class="menu-item" onclick="location.href='table.html'">Формат таблицы</div>
+    <div class="menu-item" onclick="location.href='chart.html'">Графический формат</div>
   </div>
+</div>
 
-  <div id="delete-training" class="gradient-block button-block" tabindex="0" role="button" aria-label="Удалить тренировку">
-    Удалить тренировку
-  </div>
+<div id="add-training" class="gradient-block button-block" tabindex="0" role="button" aria-label="Добавить тренировку">
+  Добавить тренировку
+</div>
 
-  <!-- Картинка -->
-  <div id="image-block">
-    <img src="images/running.jpg" alt="Беговая тренировка" />
-  </div>
+<div id="delete-training" class="gradient-block button-block" tabindex="0" role="button" aria-label="Удалить тренировку">
+  Удалить тренировку
+</div>
 
-  <script src="js/main.js"></script>
+<!-- Картинка -->
+<div id="image-block">
+  <img src="images/running.jpg" alt="Беговая тренировка" />
+</div>
+
+<script>
+  const viewBtn = document.getElementById('view-progress');
+  const menu = document.getElementById('progress-menu');
+
+  viewBtn.addEventListener('click', () => {
+    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+  });
+
+  // Скрытие меню при клике вне его
+  document.addEventListener('click', (e) => {
+    if (!document.getElementById('view-progress-container').contains(e.target)) {
+      menu.style.display = 'none';
+    }
+  });
+</script>
+
+<style>
+  .dropdown-menu {
+    background: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-top: 4px;
+    padding: 5px 0;
+    width: 220px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+
+  .menu-item {
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .menu-item:hover {
+    background-color: #f0f0f0;
+  }
+</style>
+
 </body>
 </html>
